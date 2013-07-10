@@ -2,7 +2,7 @@ exports.datadir = __dirname + "data/sites.txt"; // tests will need to override t
 var fs = require('fs');
 
 exports.handleRequest = function (req, res) {
-  console.log(exports.datadir);
+  console.log(res);
 
   var statusCode = 200;
   var defaultCorsHeaders = {
@@ -21,20 +21,34 @@ exports.handleRequest = function (req, res) {
     res.end();
   }
 
-  if (req.method === 'GET') {
-    //serve HTML for archived page
-    var siteHTML = fs.readFileSync('./data/sites/'+ userInput);
-    res.writeHead(statusCode, header);
-    res.write(statusCode, header);
-    res.end('siteHTML');
+  if (req.url === '/styles.css') {
+    styles = fs.readFileSync('./public/styles.css');
+    res.writeHead(statusCode, defaultCorsHeaders);
+    res.write(styles);
+    res.end();
   }
 
-  else if (req.method === 'POST') {
+  if (req.url === "/#index" && req.method === 'GET') {
+    //serve HTML for archived page
+    console.log("Inside GET Request");
+    var siteHTML = fs.readFileSync('./public/www.google.com');
+    console.log("Executed Line 34: Use readFileSync to save file to siteHTML");
+    res.writeHead(statusCode, defaultCorsHeaders);
+    console.log("Executed Line 36: writeHead");
+    res.write(siteHTML);
+    console.log("Executed Line 38: res.write(siteHTML)");
+    res.end();
+    console.log("Executed Line 40: res.end()");
+  }
+
+  else if (req.url === "/#index" && req.method === 'POST') {
     //append file on sites.txt
     statusCode = 302;
   }
 
   else {
-    //throw 404 or 406
+    res.writeHead(404, defaultCorsHeaders);
+    res.end("This is a weird error.");
+    console.log(req.url);
   }
 };
