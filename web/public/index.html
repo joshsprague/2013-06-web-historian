@@ -5,7 +5,57 @@
 </head>
 <body>
   <form method="POST">
-    <input type="input" name="url"></input>
+    <input type="text" name="url"></input>
+    <input type="button" id="POST" value="Archive this URL"></input>
+    <input type="button" id="GET" value="Get archived URL"></input>
   </form>
+  <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+  <script>
+  $(document).ready(function() {
+    $('#POST').on('click', function(event) {
+      var siteRequest = $('input:text').val();
+      postArchive(siteRequest);
+      $('input:text').val("");
+    })
+
+    $('#GET').on('click', function(event) {
+      var siteRequest = $('input:text').val();
+      getArchive(siteRequest);
+      $('input:text').val("");
+    })
+  });
+
+  var postArchive = function(siteRequest) {
+    console.log("Initiated AJAX request!");
+    $.ajax({
+      type: 'POST',
+      url: 'http://127.0.0.1:8081/',
+      data: siteRequest,
+      dataType: 'text/plain',
+      success: function(){
+        console.log('posted');
+      },
+      error: function() {
+        console.log('failed post request');
+      }
+    })
+  }
+
+  var getArchive = function(siteRequest) {
+    console.log("Initiated AJAX request!");
+    $.ajax({
+      type: 'GET',
+      url: 'http://127.0.0.1:8081/',
+      data: siteRequest,
+      dataType: 'text/HTML',
+      success: function(){
+        console.log('successful get');
+      },
+      error: function() {
+        console.log('failed get request');
+      }
+    })
+  }
+  </script>
 </body>
 </html>
