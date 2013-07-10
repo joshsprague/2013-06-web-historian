@@ -1,7 +1,8 @@
-exports.datadir = __dirname + "data/sites.txt"; // tests will need to override this.
-var fs = require('fs');
+var path = require('path');
+module.exports.datadir = path.join(__dirname, "../data/sites.txt"); // tests will need to override this.
 
-exports.handleRequest = function (req, res) {
+module.exports.handleRequest = function (req, res) {
+  console.log(exports.datadir);
   console.log(res);
 
   var statusCode = 200;
