@@ -26,7 +26,7 @@
   });
 
   var postArchive = function(siteRequest) {
-    console.log("Initiated AJAX request!");
+    console.log("Initiated AJAX POST request!");
     $.ajax({
       type: 'POST',
       url: 'http://127.0.0.1:8081/',
@@ -42,7 +42,7 @@
   }
 
   var getArchive = function(siteRequest) {
-    console.log("Initiated AJAX request!");
+    console.log("Initiated AJAX GET request!");
     $.ajax({
       type: 'GET',
       url: 'http://127.0.0.1:8081/',
