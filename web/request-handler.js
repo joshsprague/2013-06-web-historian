@@ -1,5 +1,7 @@
 var path = require('path');
 module.exports.datadir = path.join(__dirname, "../data/sites.txt"); // tests will need to override this.
+var url = require('url');
+var fs = require('fs');
 
 module.exports.handleRequest = function (req, res) {
   console.log(exports.datadir);
@@ -16,30 +18,24 @@ module.exports.handleRequest = function (req, res) {
   var html, styles;
 
   if (req.url === '/') {
-    html = fs.readFileSync('./public/index.html');
+    html = fs.readFileSync(path.join(__dirname, '/public/index.html'));
     res.writeHead(statusCode, defaultCorsHeaders);
     res.write(html);
     res.end();
   }
 
   if (req.url === '/styles.css') {
-    styles = fs.readFileSync('./public/styles.css');
+    styles = fs.readFileSync(path.join(__dirname, '/public/styles.css'));
     res.writeHead(statusCode, defaultCorsHeaders);
     res.write(styles);
     res.end();
   }
 
-  if (req.url === "/#index" && req.method === 'GET') {
+  if (req.method === 'GET') {
     //serve HTML for archived page
-    console.log("Inside GET Request");
-    var siteHTML = fs.readFileSync('./public/www.google.com');
-    console.log("Executed Line 34: Use readFileSync to save file to siteHTML");
+    var siteHTML = fs.readFileSync(path.join(__dirname, '/public/www.google.com'));
     res.writeHead(statusCode, defaultCorsHeaders);
-    console.log("Executed Line 36: writeHead");
-    res.write(siteHTML);
-    console.log("Executed Line 38: res.write(siteHTML)");
-    res.end();
-    console.log("Executed Line 40: res.end()");
+    res.end(siteHTML);
   }
 
   else if (req.url === "/#index" && req.method === 'POST') {
