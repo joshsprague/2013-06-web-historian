@@ -4,8 +4,6 @@ var url = require('url');
 var fs = require('fs');
 
 module.exports.handleRequest = function (req, res) {
-  console.log(exports.datadir);
-  console.log(res);
 
   var statusCode = 200;
   var defaultCorsHeaders = {
@@ -46,6 +44,5 @@ module.exports.handleRequest = function (req, res) {
   else {
     res.writeHead(404, defaultCorsHeaders);
     res.end("This is a weird error.");
-    console.log(req.url);
   }
 };
