@@ -29,20 +29,19 @@ module.exports.handleRequest = function (req, res) {
     res.end();
   }
 
-  if (req.method === 'GET') {
-    //serve HTML for archived page
+  if(req.url === '/archive?www.google.com' && req.method === 'GET'){
     var siteHTML = fs.readFileSync(path.join(__dirname, '/public/www.google.com'));
     res.writeHead(statusCode, defaultCorsHeaders);
     res.end(siteHTML);
   }
 
-  else if (req.url === "/#index" && req.method === 'POST') {
-    //append file on sites.txt
-    statusCode = 302;
+  if (req.url === '/archive' && req.method === 'POST') {
+    req.on('data', function(data) {
+      fs.appendFile(path.join(__dirname, '../data/sites.txt'), '\n'+data);
+      console.log(data);
+    });
+    res.writeHead(302, defaultCorsHeaders);
+    res.end();
   }
 
-  else {
-    res.writeHead(404, defaultCorsHeaders);
-    res.end("This is a weird error.");
-  }
 };
