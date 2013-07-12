@@ -15,6 +15,14 @@ module.exports.handleRequest = function (req, res) {
   };
   var html, styles;
 
+  var parseURL = function(url) {
+    return url.substr(0,8);
+  };
+
+  var searchURL = function(url) {
+    return url.substr(9, url.length);
+  };
+
   if (req.url === '/') {
     html = fs.readFileSync(path.join(__dirname, '/public/index.html'));
     res.writeHead(statusCode, defaultCorsHeaders);
@@ -29,19 +37,21 @@ module.exports.handleRequest = function (req, res) {
     res.end();
   }
 
-  if(req.url === '/archive?www.google.com' && req.method === 'GET'){
-    var siteHTML = fs.readFileSync(path.join(__dirname, '/public/www.google.com'));
-    res.writeHead(statusCode, defaultCorsHeaders);
-    res.end(siteHTML);
-  }
-
-  if (req.url === '/archive' && req.method === 'POST') {
-    req.on('data', function(data) {
-      fs.appendFile(path.join(__dirname, '../data/sites.txt'), '\n'+data);
-      console.log(data);
-    });
-    res.writeHead(302, defaultCorsHeaders);
-    res.end();
+  if(parseURL(req.url) === '/archive') {
+    if (req.method === 'GET') {
+      var siteHTML = fs.readFileSync(path.join(__dirname, '../data/sites/'+searchURL(req.url)));
+      res.writeHead(statusCode, defaultCorsHeaders);
+      res.end(siteHTML);
+    } else if (req.method === 'POST') {
+      req.on('data', function(data) {
+        fs.appendFile(path.join(__dirname, '../data/sites.txt'), '\n'+data);
+      });
+      res.writeHead(302, defaultCorsHeaders);
+      res.end();
+    } else {
+      res.writeHead(406, defaultCorsHeaders);
+      res.end();
+    }
   }
 
 };
